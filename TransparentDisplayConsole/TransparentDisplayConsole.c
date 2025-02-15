@@ -1,11 +1,7 @@
-// TransparentDisplayConsole.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+#include <stdio.h>
 
-#include <iostream>
-
-int main()
-{
-    std::cout << "Hello World!\n";
+int main(int argc, char* argv[]) {
+	printf("Hello, world!");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
