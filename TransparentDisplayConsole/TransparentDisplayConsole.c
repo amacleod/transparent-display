@@ -1,7 +1,19 @@
 #include <stdio.h>
 
+#include "ImageEdit.h"
+
 int main(int argc, char* argv[]) {
-	printf("Hello, world!");
+	printf("Hello, world!\n");
+
+	int returnCode = loadImage();
+
+	if (returnCode < 0) {
+		printf("We had an error! Error code: %d\n", returnCode);
+		exit(1);
+	}
+	printf("Success! Return code: %d\n", returnCode);
+
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
