@@ -5,6 +5,8 @@ Project for driving a transparent OLED screen with an Arduino.
 The prototype uses a Crystalfontz display and Seeeduino 4.2 or 4.3
 development board; see the [BOM](#bill-of-materials) for more detail.
 
+![photo of display and dev board](docs/Transparent_Display_Action_Shot.jpg)
+
 Quick Start
 -----------
 
