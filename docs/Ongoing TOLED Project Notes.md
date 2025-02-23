@@ -1,5 +1,6 @@
-## PROTOTYPE DESIGN
-### Notes/Issues
+# Ongoing TOLED Project Notes
+# PROTOTYPE DESIGN
+## Notes/Issues
 - Using Zoom API because it is available, supported, and likely platform for one-on-one video call
 - How will Arduino/Python control webcam?
 - Format for Arduino receiving video signal? Receive as hexadecimal or as binary and then convert?
@@ -8,7 +9,7 @@
 
 **Use Case**: Position webcam behind translucent screen to look through screen. In an alternating manner, webcam records user and screen displays partner. In this way, user makes eye contact with partner on screen without partner seeing their own reflection.
 
-### Architecture
+## Architecture
 #### Hardware
 - USB Seeeduino v4.3
 - USB webcam
