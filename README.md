@@ -14,10 +14,10 @@ Make sure you have your Seeeduino, the breakout board, the display, and all wire
 
 1. Install ArduinoIDE. You can get the latest version at https://www.arduino.cc/en/software
 2. Plug in your Seeeduino by USB to make sure it shows up as serial (COM) device. This procedure differs depending on whether the dev board is 4.2 or 4.3:
-   a. Seeeduino 4.2 should be automatically recognized by the serial drivers that come with ArduinoIDE.
-   b. Seeeduino 4.3 requires an additional driver for its CP2102 USB to UART bridge chip. Get the "VCP Windows" or "VCP Mac" drivers from the [Silicon Labs CP210x Download Page][cp210x].
+   * Seeeduino 4.2 should be automatically recognized by the serial drivers that come with ArduinoIDE.
+   * Seeeduino 4.3 requires an additional driver for its CP2102 USB to UART bridge chip. Get the "VCP Windows" or "VCP Mac" drivers from the [Silicon Labs CP210x Download Page][cp210x].
 3. Install the board definitions for the Seeeduino 4.x in ArduinoIDE, following the instructions from https://wiki.seeedstudio.com/Seeed_Arduino_Boards/
-   1. Note that the page has two different URLs listed, one for SAMD21 chips and another for all other Seeeduinos. We want the second one: `https://raw.githubusercontent.com/Seeed-Studio/Seeed_Platform/master/package_legacy_seeeduino_boards_index.json`
+   * Note that the page has two different URLs listed, one for SAMD21 chips and another for all other Seeeduinos. We want the second one: `https://raw.githubusercontent.com/Seeed-Studio/Seeed_Platform/master/package_legacy_seeeduino_boards_index.json`
 4. Use "Board Manager" in ArduinoIDE to set up the board. Seeeduino 4.x is covered by the "Seeeduino AVR" definition.
 5. Load this project in the IDE as a sketch. Use "File" -> "Open..." to open `testTOLED/testTOLED.ino`
 6. Make sure the breakout board is properly hooked up to the Seeeduino by means of the Dupont headers.
