@@ -4,7 +4,7 @@ image-processor - the main image processor program, to be run on the host PC.
 """
 
 import os, sys
-from PIL import Image
+from PIL import Image, ImageOps
 imageFileName = "../MirrahRatio.jpg"
 
 def main():
@@ -21,7 +21,10 @@ def main():
     #     else:
     #         print("not converting because identical")
     with Image.open(imageFileName) as im:
-        im_luminance = im.convert("L")
+        im_luminance = im.convert("1")
         im_luminance.show()
+    box = (0,0, 128, 56)
+    im_luminance_crop = im_luminance.crop(box)
+    im_luminance_crop.show()
 if __name__ == "__main__":
     main()
