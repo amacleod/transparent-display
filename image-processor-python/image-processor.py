@@ -20,11 +20,17 @@ def main():
     #             print("cannot convert", infile)
     #     else:
     #         print("not converting because identical")
-    with Image.open(imageFileName) as im:
-        im_luminance = im.convert("1")
-        im_luminance.show()
-    box = (0,0, 128, 56)
-    im_luminance_crop = im_luminance.crop(box)
-    im_luminance_crop.show()
+    input_image = Image.open(imageFileName)
+    im_black_and_white = input_image.convert("1")
+    # im_black_and_white.show()
+    im_padded = ImageOps.pad(im_black_and_white, (128, 56), color="#000")
+    # im_padded.show("padded")
+    center_x = 205 / 2
+    center_y = 246 / 2
+    box = (center_x - 64, center_y - 28, center_x + 64, center_y + 28)
+    im_black_and_white_crop = im_black_and_white.crop(box)
+    im_black_and_white_crop.show("black and white")
+    width, height = im_black_and_white.size
+    print(width, height)
 if __name__ == "__main__":
     main()
