@@ -4,8 +4,11 @@ image-processor - the main image processor program, to be run on the host PC.
 """
 
 import os, sys
-from PIL import Image, ImageOps
+# import PIL
+import PIL.Image, PIL.ImageOps
+
 imageFileName = "../MirrahRatio.jpg"
+
 
 def main():
     # for infile in sys.argv[1:]:
@@ -20,10 +23,10 @@ def main():
     #             print("cannot convert", infile)
     #     else:
     #         print("not converting because identical")
-    input_image = Image.open(imageFileName)
+    input_image = PIL.Image.open(imageFileName)
     im_black_and_white = input_image.convert("1")
     # im_black_and_white.show()
-    im_padded = ImageOps.pad(im_black_and_white, (128, 56), color="#000")
+    im_padded = PIL.ImageOps.pad(im_black_and_white, (128, 56), color="#000")
     # im_padded.show("padded")
     center_x = 205 / 2
     center_y = 246 / 2
@@ -32,5 +35,7 @@ def main():
     im_black_and_white_crop.show("black and white")
     width, height = im_black_and_white.size
     print(width, height)
+    
+
 if __name__ == "__main__":
     main()
