@@ -18,8 +18,6 @@ DISPLAY_HALF_HEIGHT = DISPLAY_HEIGHT / 2
 
 log.basicConfig(level=log.INFO, format="%(asctime)s %(levelname)-8s %(message)s")
 
-# TODO: Eventually we want the file to come from outside. ~ACM 2025-03-01
-# imageFileName = "../MirrahRatio.jpg"
 # set SHOW_IMAGES to False to prevent image popup debugging
 SHOW_IMAGES = True
 
