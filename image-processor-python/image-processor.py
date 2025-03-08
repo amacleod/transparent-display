@@ -36,7 +36,7 @@ def make_screenshot():
     image_width, image_height = screenshot_image.size
     input_image = PIL.Image.frombytes(
         "RGB", screenshot_image.size, screenshot_image.bgra, "raw", "BGRX")
-    log.info(f"Image dimensions: {image_width}px wide x {image_height}px high")
+    log.info(f"Image dimensions (width, height): ({image_width}, {image_height})")
     im_black_and_white = input_image.convert("1")
     # im_padded = PIL.ImageOps.pad(im_black_and_white, (DISPLAY_WIDTH, DISPLAY_HEIGHT), color="#000")
     center_x = image_width / 2
