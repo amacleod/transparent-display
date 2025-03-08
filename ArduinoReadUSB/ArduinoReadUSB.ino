@@ -1,26 +1,60 @@
 
 
 
-byte byteRead;
+const byte numChars = 5;
+char receivedChars[numChars];
+
+boolean newData = false;
 
 void setup() {
-  // set up once
-Serial.begin(9600);
-delay(500);
-
+    Serial.begin(9600);
+    Serial.println("<Arduino is ready>");
 }
 
 void loop() {
-  // run main code repeatedly
+    recvWithStartEndMarkers();
+    showNewData();
+}
 
+void recvWithStartEndMarkers() {
+    static boolean recvInProgress = false;
+    static byte ndx = 0;
+    char startMarker = '<';
+    char endMarker = '>';
+    char rc;
+ 
+ // if (Serial.available() > 0) {
+    while (Serial.available() > 0 && newData == false) {
+        rc = Serial.read();
 
-  if(Serial.available( )){
-  byteRead = Serial.read();
-  Serial.write(byteRead);
-  
-  }
-  delay(1000);
-  Serial.write("end");
+        if (recvInProgress == true) {
+            if (rc != endMarker) {
+                receivedChars[ndx] = rc;
+                ndx++;
+                if (ndx >= numChars) {
+                    ndx = numChars - 1;
+                }
+            }
+            else {
+                receivedChars[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
+            }
+        }
+
+        else if (rc == startMarker) {
+            recvInProgress = true;
+        }
+    }
+}
+
+void showNewData() {
+    if (newData == true) {
+        Serial.print("This just in ... ");
+        Serial.println(receivedChars);
+        newData = false;
+    }
 }
 
 
