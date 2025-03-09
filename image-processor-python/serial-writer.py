@@ -3,13 +3,14 @@ serial-writer.py - proof of concept for Python writing to USB serial port.
 
 """
 
+import os
 import time
 from serial import Serial
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 
-COM_PORT = "COM30"
+COM_PORT = os.environ.get("ARDUINO_PORT", "COM3")
 SLEEP_INTERVAL = 1.0
 READ_TIMEOUT = 0.5
 
