@@ -4,6 +4,7 @@ serial-writer.py - proof of concept for Python writing to USB serial port.
 """
 
 import os
+import random
 import time
 from serial import Serial
 
@@ -11,7 +12,7 @@ import logging as log
 log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 
 COM_PORT = os.environ.get("ARDUINO_PORT", "COM3")
-SLEEP_INTERVAL = 1.0
+SLEEP_INTERVAL = 1
 READ_TIMEOUT = 0.5
 
 
@@ -98,11 +99,7 @@ def get_current_message(index: int, messages: [bytes]) -> bytes:
 
 
 def random_message(quantity: int) -> bytes:
-    result = bytes()
-    for i in range(quantity):
-        b = b"\x55" if i%2 == 0 else b"\xaa"
-        result+= b
-    return result
+    return random.randbytes(quantity)
 
 
 if __name__ == "__main__":
