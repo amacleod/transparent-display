@@ -45,6 +45,18 @@ class ArduinoReader(object):
         return self.port.write(message)
 
 
+class ImageByteReader(object):
+    def __init__(self):
+        self.bytes = None
+
+    def read(self, data_file):
+        data_as_text = data_file.read()
+
+        for character in data_as_text:
+            pass # TODO: Actually do stuff with pixel data here! ~ACM 2025-03-22
+
+
+
 def main():
     output_messages = [b"hello\n", b"everybody\n"]
     ser = Serial(COM_PORT, timeout=READ_TIMEOUT)
