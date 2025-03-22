@@ -6,3 +6,6 @@ Debug/
 # Stuff from other tools, IDEs, etc.
 .obsidian/
 .venv/
+.idea/
+*.iml
+__pycache__/
