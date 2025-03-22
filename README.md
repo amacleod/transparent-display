@@ -19,11 +19,21 @@ Make sure you have your Seeeduino, the breakout board, the display, and all wire
 3. Install the board definitions for the Seeeduino 4.x in ArduinoIDE, following the instructions from https://wiki.seeedstudio.com/Seeed_Arduino_Boards/
    * Note that the page has two different URLs listed, one for SAMD21 chips and another for all other Seeeduinos. We want the second one: `https://raw.githubusercontent.com/Seeed-Studio/Seeed_Platform/master/package_legacy_seeeduino_boards_index.json`
 4. Use "Board Manager" in ArduinoIDE to set up the board. Seeeduino 4.x is covered by the "Seeeduino AVR" definition.
-5. Load this project in the IDE as a sketch. Use "File" -> "Open..." to open `testTOLED/testTOLED.ino`
+5. Load this project in the IDE as a sketch. Use "File" -> "Open..." to open `arduino/testTOLED/testTOLED.ino`
 6. Make sure the breakout board is properly hooked up to the Seeeduino by means of the Dupont headers.
 7. Press the "Upload" button (looks like an arrow pointing right) to compile the sketch and write it to the dev board.
 
 At this point, the TOLED display should begin cycling through a series of images whenever the Seeeduino is powered.
+
+Python Setup
+------------
+
+To test and work on the Python portion of this project, load your main
+project directory (`transparent-display` if you cloned it with the
+same name as the repository) as a PyCharm CE project. Set up
+Python 3.13 as the interpreter for the project, with a dedicated
+virtualenv. Install all the dependencies from `requirements.txt` and
+run `toled_demo.py`.
 
 Bill of Materials
 -----------------

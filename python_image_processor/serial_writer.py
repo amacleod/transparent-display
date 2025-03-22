@@ -1,5 +1,5 @@
 """
-serial-writer.py - proof of concept for Python writing to USB serial port.
+serial_writer.py - proof of concept for Python writing to USB serial port.
 
 """
 
