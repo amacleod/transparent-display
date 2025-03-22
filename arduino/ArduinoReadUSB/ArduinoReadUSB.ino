@@ -1,8 +1,3 @@
-//==============================================================================
-//  Select the interface
-#define SPI_4_WIRE
-//#define PAR_8080	  
-//#define I2C
 
 //------------------------------------------------------------------------------
 //Allow the serial debugging monitor, but only if SPI (pin conflict with parallel)
@@ -12,12 +7,12 @@
 #endif // PAR_8080
 
 //==============================================================================
-#define CLR_CS     (PORTB &= ~(0x01)) //pin #8  - Chip Enable Signal
-#define SET_CS     (PORTB |=  (0x01)) //pin #8  - Chip Enable Signal
+#define CS_LOW     (PORTB &= ~(0x01)) //pin #8  - Chip Enable Signal
+#define CS_HIGH    (PORTB |=  (0x01)) //pin #8  - Chip Enable Signal
 #define CLR_RESET  (PORTB &= ~(0x02)) //pin #12 - Reset
 #define SET_RESET  (PORTB |=  (0x02)) //pin #12 - Reset
-#define CLR_DC     (PORTC &= ~(0x01)) //pin #9  - Data/Instruction
-#define SET_DC     (PORTC |=  (0x01)) //pin #9  - Data/Instruction
+#define DC_LOW     (PORTC &= ~(0x01)) //pin #9  - Data/Instruction
+#define DC_HIGH    (PORTC |=  (0x01)) //pin #9  - Data/Instruction
 #define CLR_WR	   (PORTC &= ~(0x02)) //pin #10 - Write
 #define SET_WR	   (PORTC |=  (0x02)) //pin #10 - Write
 #define CLR_RD	   (PORTC &= ~(0x04)) //pin #11 - Read
@@ -25,48 +20,37 @@
 #define CLR_DBG	   (PORTC &= ~(0x08)) //pin #12 - Debug
 #define SET_DBG	   (PORTC |=  (0x08)) //pin #12 - Debug
 
+#define COMMAND_MODE DC_LOW
+#define DATA_MODE    DC_HIGH
+
 #include <avr/io.h>
-#ifdef SPI_4_WIRE
-  #include <SPI.h>
-#endif
-#ifdef I2C
-  #include <Wire.h>
-#endif
-//#include "CFAL12856A0_0151_B_Splash.h"
-//================================================================================
+#include <SPI.h>
+
 #define MAX_BRIGHT (0x8F)
-//================================================================================
-#ifdef SPI_4_WIRE
-//================================================================================
-void writeCommand(uint8_t command)
-  {
-  // Select the LCD's command register
-  CLR_DC;
-  // Select the LCD controller
-  CLR_CS;
 
-  //Send the command via SPI:
+/**
+ * Write a one-byte command to the display, by pulling the
+ * "command/data" pin low (command mode) and the chip select
+ * pin low before writing that byte to the SPI bus.
+ */
+void writeCommand(uint8_t command) {
+  COMMAND_MODE;
+  CS_LOW;
   SPI.transfer(command);
-  //deselect the controller
-  SET_CS;
-  }
+  CS_HIGH;
+}
 
-//================================================================================
-void writeData(uint8_t data)
-  {
-  //Select the LCD's data register
-  SET_DC;
-  //Select the LCD controller
-  CLR_CS;
-  //Send the command via SPI:
+/**
+ * Write one byte of data to the display, by pulling the
+ * "command/data" pin high (data mode) and the chip select pin high
+ * before writing the byte to the SPI bus.
+ */
+void writeData(uint8_t data) {
+  DATA_MODE;
+  CS_LOW;
   SPI.transfer(data);
-
-  // Deselect the LCD controller
-  SET_CS;
-  }
-#endif
-//================================================================================
-
+  CS_HIGH;
+}
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //  Instruction Setting
@@ -290,14 +274,11 @@ void setup() {
   PORTD = 0xff;
   SET_RD;
   SET_WR;
-  SET_CS;
+  CS_HIGH;
 
-#ifdef SPI_4_WIRE
   //SPI begin transactions takes ~2.5us
   SPI.begin();
   SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
-#endif
-			  
 
   //OLED_Init takes ~120ms
   OLED_Init();
