@@ -1,12 +1,3 @@
-
-//------------------------------------------------------------------------------
-//Allow the serial debugging monitor, but only if SPI (pin conflict with parallel)
-#define SER_DEBUG
-#ifdef PAR_8080
-  #undef SER_DEBUG
-#endif // PAR_8080
-
-//==============================================================================
 #define CS_LOW     (PORTB &= ~(0x01)) //pin #8  - Chip Enable Signal
 #define CS_HIGH    (PORTB |=  (0x01)) //pin #8  - Chip Enable Signal
 #define CLR_RESET  (PORTB &= ~(0x02)) //pin #12 - Reset
@@ -282,6 +273,7 @@ void setup() {
 
   //OLED_Init takes ~120ms
   OLED_Init();
+
   Serial.begin(9600);
   Serial.println("Arduino is ready");
 }
