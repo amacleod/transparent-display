@@ -1,21 +1,21 @@
+#include <avr/io.h>
+#include <SPI.h>
+
 #define CS_LOW     (PORTB &= ~(0x01)) //pin #8  - Chip Enable Signal
 #define CS_HIGH    (PORTB |=  (0x01)) //pin #8  - Chip Enable Signal
 #define CLR_RESET  (PORTB &= ~(0x02)) //pin #12 - Reset
 #define SET_RESET  (PORTB |=  (0x02)) //pin #12 - Reset
 #define DC_LOW     (PORTC &= ~(0x01)) //pin #9  - Data/Instruction
 #define DC_HIGH    (PORTC |=  (0x01)) //pin #9  - Data/Instruction
-#define CLR_WR	   (PORTC &= ~(0x02)) //pin #10 - Write
-#define SET_WR	   (PORTC |=  (0x02)) //pin #10 - Write
-#define CLR_RD	   (PORTC &= ~(0x04)) //pin #11 - Read
-#define SET_RD	   (PORTC |=  (0x04)) //pin #11 - Read
+#define WR_LOW	   (PORTC &= ~(0x02)) //pin #10 - Write
+#define WR_HIGH	   (PORTC |=  (0x02)) //pin #10 - Write
+#define RD_LOW	   (PORTC &= ~(0x04)) //pin #11 - Read
+#define RD_HIGH	   (PORTC |=  (0x04)) //pin #11 - Read
 #define CLR_DBG	   (PORTC &= ~(0x08)) //pin #12 - Debug
 #define SET_DBG	   (PORTC |=  (0x08)) //pin #12 - Debug
 
 #define COMMAND_MODE DC_LOW
 #define DATA_MODE    DC_HIGH
-
-#include <avr/io.h>
-#include <SPI.h>
 
 #define MAX_BRIGHT (0x8F)
 
@@ -261,10 +261,10 @@ void setup() {
   DDRD = 0xff;
   DDRC = 0xff;
   DDRB = 0x03;
-  //Idle the lines in a reasonable state
+  // Idle the unused lines in a reasonable state: pulled high.
   PORTD = 0xff;
-  SET_RD;
-  SET_WR;
+  RD_HIGH;
+  WR_HIGH;
   CS_HIGH;
 
   //SPI begin transactions takes ~2.5us
