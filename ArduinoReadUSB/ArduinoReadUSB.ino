@@ -269,7 +269,7 @@ void displayImage(const uint8_t image[896])
     Set_Start_Column(0x00);
     for (uint8_t x = 0; x < 128; x++)
       {
-      writeData(pgm_read_byte(&image[(y*128)+x]));
+      writeData(image[(y*128)+x]);
       }
     }
   //Clear the last page so stray pixels do not show in getter area.

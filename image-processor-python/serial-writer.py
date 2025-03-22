@@ -100,7 +100,8 @@ def get_current_message(index: int, messages: [bytes]) -> bytes:
 def random_message(quantity: int) -> bytes:
     result = bytes()
     for i in range(quantity):
-        result+= b"U"
+        b = b"\x55" if i%2 == 0 else b"\xaa"
+        result+= b
     return result
 
 
