@@ -16,8 +16,9 @@ READ_TIMEOUT = 0.5
 
 
 class ArduinoReader(object):
-    def __init__(self, port: Serial):
-        self.port = port
+    def __init__(self):
+        self.port = Serial(COM_PORT, timeout=READ_TIMEOUT, baudrate=9600)
+        log.info(f"Serial port opened: {self.port.name}, {self.port.baudrate}, {self.port.bytesize}, {self.port.parity}, {self.port.timeout}")
         self.ready = False
 
     def read(self) -> str:
@@ -44,22 +45,25 @@ class ArduinoReader(object):
         """
         return self.port.write(message)
 
+    def close(self):
+        self.port.close()
+
 
 def main():
+    reader = ArduinoReader()
     output_messages = [b"hello\n", b"everybody\n"]
-    ser = Serial(COM_PORT, timeout=READ_TIMEOUT)
-    log.info(f"Serial port opened: {ser.name}, {ser.baudrate}, {ser.bytesize}, {ser.parity}, {ser.timeout}")
-    reader = ArduinoReader(ser)
     index = 0
     while True:
         try:
-            index_delta = read_and_write(reader, get_current_message(index, output_messages))
-            index += index_delta
+            #message = get_current_message(index, output_messages)
+            message = random_message(896)
+            index_delta = read_and_write(reader, message)
+            #index += index_delta
             time.sleep(SLEEP_INTERVAL)
         except KeyboardInterrupt:
             log.debug("Interrupted.")
             break
-    ser.close()
+    reader.close()
     log.info("Done.")
 
 
@@ -91,6 +95,13 @@ def get_current_message(index: int, messages: [bytes]) -> bytes:
     :return: one of the messages.
     """
     return messages[index % len(messages)]
+
+
+def random_message(quantity: int) -> bytes:
+    result = bytes()
+    for i in range(quantity):
+        result+= b"U"
+    return result
 
 
 if __name__ == "__main__":
