@@ -3,12 +3,13 @@ serial-writer.py - proof of concept for Python writing to USB serial port.
 
 """
 
+import logging as log
 import os
 import random
 import time
+
 from serial import Serial
 
-import logging as log
 log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 
 COM_PORT = os.environ.get("ARDUINO_PORT", "COM3")
@@ -19,7 +20,8 @@ READ_TIMEOUT = 0.5
 class ArduinoReader(object):
     def __init__(self):
         self.port = Serial(COM_PORT, timeout=READ_TIMEOUT, baudrate=9600)
-        log.info(f"Serial port opened: {self.port.name}, {self.port.baudrate}, {self.port.bytesize}, {self.port.parity}, {self.port.timeout}")
+        log.info(
+            f"Serial port opened: {self.port.name}, {self.port.baudrate}, {self.port.bytesize}, {self.port.parity}, {self.port.timeout}")
         self.ready = False
 
     def read(self) -> str:
@@ -52,14 +54,10 @@ class ArduinoReader(object):
 
 def main():
     reader = ArduinoReader()
-    output_messages = [b"hello\n", b"everybody\n"]
-    index = 0
     while True:
         try:
-            #message = get_current_message(index, output_messages)
             message = random_message(896)
-            index_delta = read_and_write(reader, message)
-            #index += index_delta
+            read_and_write(reader, message)
             time.sleep(SLEEP_INTERVAL)
         except KeyboardInterrupt:
             log.debug("Interrupted.")
@@ -84,18 +82,6 @@ def read_and_write(reader: ArduinoReader, message: bytes) -> int:
         log.debug(f"Wrote {bytes_written} bytes.")
         return 1
     return 0
-
-
-def get_current_message(index: int, messages: [bytes]) -> bytes:
-    """
-    Given an incrementing index and an array of byte blobs, pick one
-    of the messages.
-
-    :param index: numeric index; expected to start at 0 and increase by 1.
-    :param messages: list of messages to choose from.
-    :return: one of the messages.
-    """
-    return messages[index % len(messages)]
 
 
 def random_message(quantity: int) -> bytes:
