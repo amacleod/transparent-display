@@ -100,8 +100,6 @@ void Fill_RAM(uint8_t Data) {
 #define XLevelL 0x00
 #define XLevelH 0x10
 #define XLevel ((XLevelH & 0x0F) * 16 + XLevelL)
-#define HRES 128
-#define VRES 56
 #define Brightness 0xBF
 
 void OLED_Init() {
@@ -183,30 +181,12 @@ void OLED_Init() {
   writeCommand(0XAF);  // Display On (0xAE/0xAF)
 }
 
-//================================================================================
-// showSplash() takes an image out of flash and puts it on the screen. In this case,
-// the image stored in flash is the splash screen
-//================================================================================
-void showImage(const uint8_t image[7][128]) {
-  //The logo fits in the first 7 pages (7x8=56)
-  for (uint8_t y = 0; y < 7; y++) {
-    // Set the starting page and column
-    Set_Start_Page(y);
-    Set_Start_Column(0x00);
-    for (uint8_t x = 0; x < 128; x++) {
-      writeData(pgm_read_byte(&image[y][x]));
-    }
-  }
-  //Clear the last page so stray pixels do not show in getter area.
-  Set_Start_Page(7);
-  Set_Start_Column(0x00);
-  for (uint8_t x = 0; x < 128; x++) {
-    writeData(0x00);
-  }
-}
-
+/**
+ * Given an array of bytes, each of which represents a strip of 8 pixels,
+ * write the whole image to the display, one byte at a time.
+ */
 void displayImage(const uint8_t image[896]) {
-  //The logo fits in the first 7 pages (7x8=56)
+  // Pages 0 through 6 constitute the visible portion of the screen, the upper 56 rows of pixels.
   for (uint8_t y = 0; y < 7; y++) {
     // Set the starting page and column
     Set_Start_Page(y);
@@ -224,15 +204,9 @@ void displayImage(const uint8_t image[896]) {
 }
 
 void setup() {
-  //Set up port directions
-  DDRD = 0xff;
-  DDRC = 0xff;
-  DDRB = 0x03;
-  // Idle the unused lines in a reasonable state: pulled high.
-  PORTD = 0xff;
-  RD_HIGH;
-  WR_HIGH;
-  CS_HIGH;
+  // Set up port directions: for each bit, 1=output and 0=input.
+  DDRC |= 0x01; // Analog pin 0 output, all others remain as they were.
+  DDRB |= 0x03; // Digital pins 8 and 9 output, all others remain as they were.
 
   //SPI begin transactions takes ~2.5us
   SPI.begin();
