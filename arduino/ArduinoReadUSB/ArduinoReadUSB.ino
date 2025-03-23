@@ -103,33 +103,7 @@ void Fill_RAM(uint8_t Data)
       }
     }
   }
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void Fill_RAM_CheckerBoard(void)
-  {
-  uint8_t
-    page;
-  uint8_t
-    column;
 
-  for(page = 0; page < 8; page++)
-    {
-    Set_Start_Page(page);
-    Set_Start_Column(0x00);
-
-    for (column= 0; column < 128; column++)
-      {
-      if(0 == (column&0x01))
-        {
-        writeData(0x55);
-        }
-      else
-        {
-        writeData(0xAA);
-        }
-      }
-    }
-  }
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define XLevelL    0x00
 #define XLevelH    0x10
 #define XLevel     ((XLevelH&0x0F)*16+XLevelL)
