@@ -1,18 +1,27 @@
 #include <avr/io.h>
 #include <SPI.h>
 
+// Pins on the Seeeduino to pins on the Crystalfontz display:
+// Seeeduino  Crystalfontz   Wire Color  Function
+//  D8         08 (CS)       Purple      Component Select for SPI
+//  D9         10 (RST)      Grey        Reset Peripheral
+//  D11        01            Blue        Serial Data Out
+//  D13        00            Green       Serial Clock
+//  A0         09 (D/C)      Brown       Data / Command Selector
+
 #define CS_LOW     (PORTB &= ~(0x01)) //pin #8  - Chip Enable Signal
 #define CS_HIGH    (PORTB |=  (0x01)) //pin #8  - Chip Enable Signal
-#define CLR_RESET  (PORTB &= ~(0x02)) //pin #12 - Reset
-#define SET_RESET  (PORTB |=  (0x02)) //pin #12 - Reset
+#define RESET_LOW  (PORTB &= ~(0x02)) //pin #10 - Reset
+#define RESET_HIGH (PORTB |=  (0x02)) //pin #10 - Reset
+
 #define DC_LOW     (PORTC &= ~(0x01)) //pin #9  - Data/Instruction
 #define DC_HIGH    (PORTC |=  (0x01)) //pin #9  - Data/Instruction
-#define WR_LOW	   (PORTC &= ~(0x02)) //pin #10 - Write
-#define WR_HIGH	   (PORTC |=  (0x02)) //pin #10 - Write
-#define RD_LOW	   (PORTC &= ~(0x04)) //pin #11 - Read
-#define RD_HIGH	   (PORTC |=  (0x04)) //pin #11 - Read
-#define CLR_DBG	   (PORTC &= ~(0x08)) //pin #12 - Debug
-#define SET_DBG	   (PORTC |=  (0x08)) //pin #12 - Debug
+#define WR_LOW     (PORTC &= ~(0x02)) //pin #10 - Write
+#define WR_HIGH    (PORTC |=  (0x02)) //pin #10 - Write
+#define RD_LOW     (PORTC &= ~(0x04)) //pin #11 - Read
+#define RD_HIGH    (PORTC |=  (0x04)) //pin #11 - Read
+#define DEBUG_LOW  (PORTC &= ~(0x08)) //pin #12 - Debug
+#define DEBUG_HIGH (PORTC |=  (0x08)) //pin #12 - Debug
 
 #define COMMAND_MODE DC_LOW
 #define DATA_MODE    DC_HIGH
@@ -132,9 +141,9 @@ void OLED_Init()
   {
   //The CFA10105 has a power-on reset circuit, 
   //you can use the following code if you are using GPIO for reset
-  CLR_RESET;
+  RESET_LOW;
   delay(1);
-  SET_RESET;
+  RESET_HIGH;
   delay(120);
 
   writeCommand(0xFD);	// Set Command Lock
