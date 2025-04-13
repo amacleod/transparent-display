@@ -3,7 +3,7 @@ serial-writer-test-image.py - proof of concept for Python sending loaded image v
 
 """
 
-#import numpy
+import numpy
 # import binascii
 import PIL.Image
 
@@ -71,7 +71,7 @@ def main():
     test_image_black_and_white = test_image.convert("1")
     test_image_black_and_white_crop = test_image_black_and_white.crop(box)
     #test_image_black_and_white_crop.show()
-    #test_image_binary = numpy.asarray(test_image_black_and_white_crop).astype(int)
+    test_image_binary = numpy.asarray(test_image_black_and_white_crop).astype(int)
     # test_image_hex = binascii.hexlify(test_image_binary)
     #print(test_image_binary)
 
@@ -84,7 +84,7 @@ def main():
     reader = ArduinoReader(ser)
     while True:
         try:
-            read_and_write(reader, image_to_bytes(test_image_black_and_white_crop))
+            read_and_write(reader, image_to_bytes(test_image_binary))
             time.sleep(SLEEP_INTERVAL)
         except KeyboardInterrupt:
             log.debug("Interrupted.")
@@ -122,10 +122,25 @@ def get_current_message(index: int, messages: [bytes]) -> bytes:
     """
     return messages[index % len(messages)]
 
-def image_to_bytes(input_image: PIL.Image) -> bytes:
-    result = input_image.tobytes()
-    log.debug(f"result length {len(result)}")
-    return result
+def image_to_bytes(input_image: numpy.ndarray) -> bytes:
+    allbytes = bytearray()
+    for row in range (7):
+        for column in range (128):
+            bits = []
+            for subrow in range (8):
+                actualrow = row*8+subrow
+                pixel = input_image[actualrow][column]
+                bits.append (pixel)
+            currentbyte = bits_to_byte(bits)
+            print (currentbyte)
+            allbytes.append(currentbyte)
+    return allbytes
+
+def bits_to_byte(bits: [int]) -> int:
+    result = 0
+    for bit in bits:
+        result = result<<1 | bit
+    return int(result)
 
 if __name__ == "__main__":
     main()
