@@ -19,7 +19,7 @@ DISPLAY_HALF_HEIGHT = DISPLAY_HEIGHT / 2
 log.basicConfig(level=log.INFO, format="%(asctime)s %(levelname)-8s %(message)s")
 
 # set SHOW_IMAGES to False to prevent image popup debugging
-SHOW_IMAGES = True
+SHOW_IMAGES = False
 
 
 def main():
@@ -28,7 +28,7 @@ def main():
     log.info("Done.")
 
 
-def make_screenshot():
+def make_screenshot() -> PIL.Image:
     screenshot = mss()
     screenshot_image = screenshot.grab(screenshot.monitors[1])
     # log.info(f"Loading image: {imageFileName}")
@@ -55,7 +55,7 @@ def make_screenshot():
             if proc.name() == "Photos.exe":
                 log.info(proc.name())
                 proc.kill()
-
+    return im_black_and_white_crop
 
 if __name__ == "__main__":
     main()
