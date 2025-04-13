@@ -124,12 +124,12 @@ def get_current_message(index: int, messages: [bytes]) -> bytes:
 
 def image_to_bytes(input_image: numpy.ndarray) -> bytes:
     allbytes = bytearray()
-    for row in range (7):
+    for strip in range (7):
         for column in range (128):
             bits = []
             for subrow in range (8):
-                actualrow = row*8+subrow
-                pixel = input_image[actualrow][column]
+                row = strip*8+7-subrow
+                pixel = input_image[row][column]
                 bits.append (pixel)
             currentbyte = bits_to_byte(bits)
             print (currentbyte)
