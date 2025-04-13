@@ -8,10 +8,10 @@ import os
 import random
 import time
 
-from . import screenshot_puller
-from . import image_converter
-
 from serial import Serial
+
+from . import image_converter
+from . import screenshot_puller
 
 log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 
@@ -59,9 +59,7 @@ def main():
     reader = ArduinoReader()
     while True:
         try:
-            #message = random_message(896)
-            screenshot = screenshot_puller.make_screenshot()
-            message = image_converter.image_to_bytes(screenshot)
+            message = message_from_screenshot()
             read_and_write(reader, message)
             time.sleep(SLEEP_INTERVAL)
         except KeyboardInterrupt:
@@ -92,8 +90,11 @@ def read_and_write(reader: ArduinoReader, message: bytes) -> int:
 def random_message(quantity: int) -> bytes:
     return random.randbytes(quantity)
 
+
 def message_from_screenshot() -> bytes:
-    pass
+    screenshot = screenshot_puller.make_screenshot()
+    return image_converter.image_to_bytes(screenshot)
+
 
 if __name__ == "__main__":
     main()
