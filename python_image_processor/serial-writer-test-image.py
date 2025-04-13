@@ -3,9 +3,10 @@ serial-writer-test-image.py - proof of concept for Python sending loaded image v
 
 """
 
-import numpy
+#import numpy
 # import binascii
-from PIL import Image
+import PIL.Image
+
 DISPLAY_WIDTH = 128
 DISPLAY_HEIGHT = 56
 DISPLAY_HALF_WIDTH = DISPLAY_WIDTH / 2
@@ -56,7 +57,7 @@ class ArduinoReader(object):
 
 def main():
     test_image_path = "data/Bourbeau_FESCenter.jpg"
-    test_image = Image.open(test_image_path)
+    test_image = PIL.Image.open(test_image_path)
     image_width, image_height = test_image.size
     center_x = image_width / 2
     center_y = image_height / 2
@@ -70,9 +71,9 @@ def main():
     test_image_black_and_white = test_image.convert("1")
     test_image_black_and_white_crop = test_image_black_and_white.crop(box)
     #test_image_black_and_white_crop.show()
-    test_image_binary = numpy.asarray(test_image_black_and_white_crop).astype(int)
+    #test_image_binary = numpy.asarray(test_image_black_and_white_crop).astype(int)
     # test_image_hex = binascii.hexlify(test_image_binary)
-    print(test_image_binary)
+    #print(test_image_binary)
 
 
 
@@ -83,7 +84,7 @@ def main():
     reader = ArduinoReader(ser)
     while True:
         try:
-            read_and_write(reader, array_to_bytes(test_image_binary))
+            read_and_write(reader, image_to_bytes(test_image_black_and_white_crop))
             time.sleep(SLEEP_INTERVAL)
         except KeyboardInterrupt:
             log.debug("Interrupted.")
@@ -121,8 +122,8 @@ def get_current_message(index: int, messages: [bytes]) -> bytes:
     """
     return messages[index % len(messages)]
 
-def array_to_bytes(array: numpy.ndarray) -> bytes:
-    result = array.tobytes()
+def image_to_bytes(input_image: PIL.Image) -> bytes:
+    result = input_image.tobytes()
     log.debug(f"result length {len(result)}")
     return result
 
