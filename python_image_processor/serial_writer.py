@@ -7,8 +7,8 @@ import logging as log
 import os
 import random
 import time
-import screenshot_puller
-import image_converter
+from python_image_processor import screenshot_puller
+from python_image_processor import image_converter
 
 from serial import Serial
 
