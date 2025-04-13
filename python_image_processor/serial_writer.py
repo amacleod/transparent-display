@@ -7,6 +7,7 @@ import logging as log
 import os
 import random
 import time
+import screenshot_puller
 
 from serial import Serial
 
@@ -87,6 +88,8 @@ def read_and_write(reader: ArduinoReader, message: bytes) -> int:
 def random_message(quantity: int) -> bytes:
     return random.randbytes(quantity)
 
+def message_from_screenshot() -> bytes:
+    pass
 
 if __name__ == "__main__":
     main()

@@ -55,7 +55,7 @@ class ArduinoReader(object):
 
 
 def main():
-    test_image_path = "C:/Users/Dennis/Documents/GitHub/transparent-display/Bourbeau_FESCenter.jpg"
+    test_image_path = "data/Bourbeau_FESCenter.jpg"
     test_image = Image.open(test_image_path)
     image_width, image_height = test_image.size
     center_x = image_width / 2
@@ -77,15 +77,13 @@ def main():
 
 
     #output_messages = [b"hello\n", b"everybody\n"]
-    output_messages = test_image_binary
+    #output_messages = test_image_binary
     ser = Serial(COM_PORT, timeout=READ_TIMEOUT)
     log.info(f"Serial port opened: {ser.name}, {ser.baudrate}, {ser.bytesize}, {ser.parity}, {ser.timeout}")
     reader = ArduinoReader(ser)
-    index = 0
     while True:
         try:
-            index_delta = read_and_write(reader, get_current_message(index, output_messages))
-            index += index_delta
+            read_and_write(reader, array_to_bytes(test_image_binary))
             time.sleep(SLEEP_INTERVAL)
         except KeyboardInterrupt:
             log.debug("Interrupted.")
@@ -123,6 +121,10 @@ def get_current_message(index: int, messages: [bytes]) -> bytes:
     """
     return messages[index % len(messages)]
 
+def array_to_bytes(array: numpy.ndarray) -> bytes:
+    result = array.tobytes()
+    log.debug(f"result length {len(result)}")
+    return result
 
 if __name__ == "__main__":
     main()
