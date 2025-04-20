@@ -22,6 +22,8 @@ Data transfer rate: how fast can 9600 baud transfer 896 bytes?
 
 Idea: only send from Python when Arduino asks for it. Python is an on-demand server for image bytes.
 
+Python should always have a buffer ready to send to Arduino, so that it can respond immediately.
+
 First Draft Design
 ------------------
 
@@ -33,3 +35,12 @@ Command palette:
 - READY: Arduino is online. Do not send any bytes before this.
 - FRAME _N_: Arduino is ready for a single image frame. Send N bytes and then go back to waiting.
 - DEBUG _message_: Arduino has debug data. Read until newline and collect that message for human consumption.
+- END: Arduino is done. Stop sending bytes forever.
+
+When Arduino fails to get a frame within a certain time (500ms?),
+it should assume that Python is gone, and blank the screen.
+
+### Python Side
+
+Infinite `while` loop after initialization. Check data for command: if no command is found, refresh the
+ready-to-send buffer. If a command _is_ found, and the command is "FRAME" then send the image.
