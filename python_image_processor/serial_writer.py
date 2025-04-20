@@ -18,7 +18,7 @@ log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s
 COM_PORT = os.environ.get("ARDUINO_PORT", "COM3")
 SLEEP_INTERVAL = 1
 READ_TIMEOUT = 0.5
-
+DO_THE_LOOP_FOREVER = False
 
 class ArduinoReader(object):
     def __init__(self):
@@ -57,17 +57,27 @@ class ArduinoReader(object):
 
 def main():
     reader = ArduinoReader()
+    if DO_THE_LOOP_FOREVER:
+        repeat_forever(write_the_image, reader)
+    else:
+        write_the_image(reader)
+    reader.close()
+    log.info("Done.")
+
+
+def repeat_forever(do_the_thing, reader: ArduinoReader):
     while True:
         try:
-            # message = message_from_screenshot()
-            message = message_from_file('data/Ellipse128x56.png')
-            read_and_write(reader, message)
+            do_the_thing(reader)
             time.sleep(SLEEP_INTERVAL)
         except KeyboardInterrupt:
             log.debug("Interrupted.")
             break
-    reader.close()
-    log.info("Done.")
+
+
+def write_the_image(reader):
+    message = message_from_file('data/Ellipse128x56.png')
+    read_and_write(reader, message)
 
 
 def read_and_write(reader: ArduinoReader, message: bytes) -> int:
