@@ -216,21 +216,22 @@ void setup() {
   OLED_Init();
 
   Serial.begin(9600);
-  Serial.println("Arduino is ready");
+  Serial.println("READY");
 }
 
 void loop() {
-  while (!Serial.available()) {
-    delay(100);
-  }
-  read_and_echo();
+  Serial.println("DEBUG hello");
+  delay(100);
+  char buffer[896];
+  request_image(buffer);
+  displayImage(buffer);
+  Serial.println("DEBUG image displayed");
 }
 
-void read_and_echo() {
-  //String s = Serial.readStringUntil("\n");
-  //String response = s.substring(0, s.length() - 1);
-  char buffer[896];
-  size_t bytes_read = Serial.readBytes(buffer, 896);
-  displayImage(buffer);
-  //Serial.println(bytes_read);
+int request_image(char *buf) {
+  Serial.println("FRAME 896");
+  size_t bytes_read = Serial.readBytes(buf, 896);
+  Serial.print("DEBUG bytes_read=");
+  Serial.println(bytes_read);
+  return 0;
 }

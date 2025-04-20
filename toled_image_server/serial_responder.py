@@ -11,7 +11,7 @@ import logging as log
 log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 
 class SerialPort(object):
-    READ_TIMEOUT = 0.5
+    READ_TIMEOUT = 10.0
     BAUD_RATE = 9600
 
     def __init__(self, port_name: str, timeout=READ_TIMEOUT, baudrate=BAUD_RATE):
@@ -32,18 +32,41 @@ class SerialPort(object):
         self.port.close()
 
 
+class CommandHandler(object):
+    def __init__(self):
+        self.empty = bytes()
+        from python_image_processor import image_converter
+        self.ellipse = image_converter.bytes_from_file("data/Ellipse128x56.png")
+
+    def handle(self, message: str) -> bytes:
+        if len(message) > 0:
+            log.info(f"Command received: {message}")
+            if "FRAME" in message:
+                return self.ellipse
+        return self.empty
+
+
 class SerialResponder(object):
     POLLING_INTERVAL = 0.01
 
-    def __init__(self, port: SerialPort, polling_interval=POLLING_INTERVAL):
+    def __init__(self, port: SerialPort, handler: CommandHandler = None, polling_interval=POLLING_INTERVAL):
         self.port = port
+        self.handler = handler
+        if self.handler is None:
+            self.handler = CommandHandler()
         self.interval = polling_interval
 
     def main_loop(self):
-        log.debug(f"Beginning response loop with {self.interval} second interval.")
+        log.info(f"Beginning response loop with {self.interval} second interval.")
         while True:
             try:
+                # 1. Prepare frame data.
+                # 2. Read from Arduino and look for a command.
+                message = self.port.read()
+                response = self.handler.handle(message)
+                if len(response) > 0:
+                    self.port.write(response)
                 time.sleep(self.interval)
             except KeyboardInterrupt:
                 break
-        log.debug("Done.")
+        log.info("Done.")
