@@ -59,7 +59,8 @@ def main():
     reader = ArduinoReader()
     while True:
         try:
-            message = message_from_screenshot()
+            # message = message_from_screenshot()
+            message = message_from_file('data/Ellipse128x56.png')
             read_and_write(reader, message)
             time.sleep(SLEEP_INTERVAL)
         except KeyboardInterrupt:
@@ -94,6 +95,10 @@ def random_message(quantity: int) -> bytes:
 def message_from_screenshot() -> bytes:
     screenshot = screenshot_puller.make_screenshot()
     return image_converter.image_to_bytes(screenshot)
+
+
+def message_from_file(filename: str) -> bytes:
+    return image_converter.bytes_from_file(filename)
 
 
 if __name__ == "__main__":

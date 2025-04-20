@@ -10,6 +10,11 @@ import logging as log
 log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 
 
+def bytes_from_file(filename: str) -> bytes:
+    image = PIL.Image.open(filename)
+    return image_to_bytes(image)
+
+
 def image_to_bytes(input_image :PIL.Image) -> bytes:
     array = numpy.asarray(input_image).astype(int)
     return array_to_bytes(array)
