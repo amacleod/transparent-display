@@ -42,6 +42,18 @@ class ArduinoReader(object):
             self.ready = True
         return response
 
+    def read_until_ready(self, polling_interval=1.0):
+        """
+        Read lines from serial until we get "ready" in the response.
+        :param polling_interval:
+        :return:
+        """
+        while not self.ready:
+            self.read()
+            if not self.ready:
+                time.sleep(polling_interval)
+        log.info("ArduinoReader is ready.")
+
     def write(self, message: bytes) -> int:
         """
         Write a byte array to the Arduino over the serial port.
@@ -60,6 +72,7 @@ def main():
     if DO_THE_LOOP_FOREVER:
         repeat_forever(write_the_image, reader)
     else:
+        reader.read_until_ready(SLEEP_INTERVAL)
         write_the_image(reader)
     reader.close()
     log.info("Done.")
