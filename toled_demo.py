@@ -9,7 +9,7 @@ from toled_image_server import serial_responder
 
 import logging as log
 
-log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
+log.basicConfig(level=log.INFO, format="%(asctime)s %(levelname)-8s %(message)s")
 
 COM_PORT = os.environ.get("ARDUINO_PORT", "COM3")
 

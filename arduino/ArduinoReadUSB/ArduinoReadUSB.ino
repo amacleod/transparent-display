@@ -215,23 +215,23 @@ void setup() {
   //OLED_Init takes ~120ms
   OLED_Init();
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("READY");
 }
 
 void loop() {
-  Serial.println("DEBUG hello");
-  delay(100);
+  // Serial.println("DEBUG hello");
+  // delay(100);
   char buffer[896];
   request_image(buffer);
   displayImage(buffer);
-  Serial.println("DEBUG image displayed");
+  // Serial.println("DEBUG image displayed");
 }
 
 int request_image(char *buf) {
   Serial.println("FRAME 896");
   size_t bytes_read = Serial.readBytes(buf, 896);
-  Serial.print("DEBUG bytes_read=");
-  Serial.println(bytes_read);
+  // Serial.print("DEBUG bytes_read=");
+  // Serial.println(bytes_read);
   return 0;
 }

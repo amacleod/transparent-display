@@ -8,11 +8,11 @@ import time
 import serial
 import logging as log
 
-log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
+# log.basicConfig(level=log.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 
 class SerialPort(object):
     READ_TIMEOUT = 10.0
-    BAUD_RATE = 9600
+    BAUD_RATE = 115200
 
     def __init__(self, port_name: str, timeout=READ_TIMEOUT, baudrate=BAUD_RATE):
         self.port = serial.Serial(port_name, timeout=timeout, baudrate=baudrate)
