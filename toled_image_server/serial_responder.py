@@ -39,11 +39,22 @@ class CommandHandler(object):
         self.ellipse = image_converter.bytes_from_file("data/Ellipse128x56.png")
 
     def handle(self, message: str) -> bytes:
+        """
+        Handle a command from the connected device. If the command
+        should produce a response, return that response as bytes.
+
+        :param message:
+        :return:
+        """
         if len(message) > 0:
             log.info(f"Command received: {message}")
             if "FRAME" in message:
                 return self.ellipse
         return self.empty
+
+
+class VideoReceiver(object):
+    pass
 
 
 class SerialResponder(object):
