@@ -71,12 +71,6 @@ class SerialResponder(object):
         log.info(f"Beginning response loop with {self.interval} second interval.")
         while True:
             try:
-                # 1. Prepare frame data.
-                # 2. Read from Arduino and look for a command.
-                message = self.port.read()
-                response = self.handler.handle(message)
-                if len(response) > 0:
-                    self.port.write(response)
                 time.sleep(self.interval)
             except KeyboardInterrupt:
                 break
